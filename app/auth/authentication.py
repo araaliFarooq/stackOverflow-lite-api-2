@@ -5,7 +5,7 @@ from flask.views import MethodView
 from flask_jwt_extended import create_access_token
 from app.validation import FieldValidation
 from app.models import User
-from app.db.dbFunctions import is_user_exist, add_new_user, get_user_by_username
+from app.db.dbFunctions import is_user_exist, add_new_user, get_user_by_username, is_email_exist
 
 validate = FieldValidation()
 auth_blueprint = Blueprint("auth_blueprint", __name__)
@@ -25,12 +25,18 @@ class RegisterUser(MethodView):
             return validation_resp
 
         email_validation = validate.validate_email(email)
-
         if email_validation == False:
             return jsonify({"message": "wrong email entered, Please try again"}), 400
 
-        if is_user_exist:
-            return jsonify({"message": "User already exists"}), 400
+        does_user_exist = is_user_exist(userName)
+        does_email_exist = is_email_exist(email)
+
+        if does_user_exist:
+            return jsonify({"message": "Username already exists"}), 400
+
+        elif does_email_exist:
+            return jsonify({"message": "Email already exists"}), 400
+
         else:
             add_new_user(userName=userName, email=email, password=password)
             new_user = User(userName, email, password)
