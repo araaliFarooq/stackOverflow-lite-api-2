@@ -51,3 +51,9 @@ def is_question_exist(question):
     if question:
         return True
     return False
+
+def get_all_questions():
+    #function to get all posted questions
+    cursor.execute("SELECT * from questions")
+    all_questions = cursor.fetchall()
+    return all_questions    

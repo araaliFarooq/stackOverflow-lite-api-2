@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.validation import FieldValidation
 from app.models import Question, Answer, Comment
-from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username
+from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username, get_all_questions
 
 validate = FieldValidation()
 question_blueprint = Blueprint("question_blueprint", __name__)
@@ -34,6 +34,14 @@ class PostQuestion(MethodView):
         post_new_question(qstn_tag=qstn_tag, question=question, qstn_owner=qstn_owner, date=date)
         new_question = Question(qstn_tag=qstn_tag, question=question, qstn_owner=qstn_owner, date=date)
         return jsonify({'New Question Posted': new_question.__dict__}), 201
+
+
+class FetchAllQuestions(MethodView):
+    """Class to fetch all questions posted"""
+    def get(self):
+        all_questions = get_all_questions()
+        return jsonify({"All Questions": all_questions}), 200
+
 
         
 
