@@ -33,4 +33,10 @@ class FieldValidation:
             if re.match("[^@]+@[^@]+\.[^@]+", email) != None:
                 return True
             return False
-        return False 
+        return False
+
+    def validate_type(self, input):
+        if re.match("^[1-9]\d*(\.\d+)?$", input) != None:
+            return True
+        return False
+    
