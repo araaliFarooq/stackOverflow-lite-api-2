@@ -7,11 +7,25 @@ class User:
         self.password = password
 
 class Question:
-    def __init__(self, qstn_tag, question, qstn_owner, date):
-        self.qstn_tag = qstn_tag
+    def __init__(self, title, question, qstn_owner, date):
+        self.title = title
         self.question = question
         self.qstn_owner = qstn_owner
         self.date = date
+
+    def toJson(self):
+        """Function to give the question model ability to be jsonified """
+        question = dict(
+            title=self.title,
+            question=self.question,
+            qstn_owner=self.qstn_owner,
+            date=self.date
+        )
+        return question   
+
+    # method to enable us display class objects as dictionaries 
+    def __repr__(self):
+        return repr(self.__dict__)
 
 class Answer:
     def __init__(self, answer, ans_owner, qstn_id, date):

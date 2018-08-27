@@ -3,13 +3,24 @@ import re
 
 class FieldValidation:
 
-    def client_validation(self, userName, password):
-        if not userName:
+    def register_validation(self, user_name, email, password):
+        if not user_name:
             return jsonify({"message": "username is missing"}), 400
+        if not email:
+            return jsonify({"message": "email is missing"}), 400
         if not password:
             return jsonify({"message": "password is missing"}), 400
         if len(password) < 5:
             return jsonify({"message": "password should be at least 5 characters long"}), 400    
+
+
+    def login_validation(self, user_name, password):
+        if not user_name:
+            return jsonify({"message": "username is missing"}), 400
+        if not password:
+            return jsonify({"message": "password is missing"}), 400
+        if len(password) < 5:
+            return jsonify({"message": "password should be at least 5 characters long"}), 400            
 
    
     def validate_entered_id(self,id):
@@ -19,8 +30,8 @@ class FieldValidation:
             return jsonify({"message": "Id should be an interger"}), 400
 
     
-    def validate_question(self, qstn_tag, question):
-        if not qstn_tag:
+    def validate_question(self, title, question):
+        if not title:
             return jsonify({"message": "No question tag was given"}), 400
         if not question:
             return jsonify({"message": "No question was given"}), 400
@@ -39,4 +50,10 @@ class FieldValidation:
         if re.match("^[1-9]\d*(\.\d+)?$", input) != None:
             return True
         return False
+
+    def validate_characters(self, input):
+        if re.search('[a-zA-Z]', input) != None:
+            return True
+        return False    
+
     

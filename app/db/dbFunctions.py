@@ -3,17 +3,17 @@
 from app.db.dbManager import DBConnection
 
 connect = DBConnection()
-cursor = connect.cursor
+cursor = connect.dict_cursor
 
-def add_new_user(userName, email, password):
+def add_new_user(user_name, email, password):
     #reegister a user
     query = (
-        """INSERT INTO users (userName, email, password) VALUES ('{}', '{}', '{}')""".format(userName, email, password))
+        """INSERT INTO users (username, email, password) VALUES ('{}', '{}', '{}')""".format(user_name, email, password))
     cursor.execute(query)
 
-def is_user_exist(userName):
+def is_user_exist(user_name):
     # check if username exists.
-    query = ("""SELECT * FROM users where userName = '{}'""".format(userName))
+    query = ("""SELECT * FROM users where username = '{}'""".format(user_name))
     cursor.execute(query)
     user = cursor.fetchone()
     if user:
@@ -30,17 +30,17 @@ def is_email_exist(email):
     return False        
 
 
-def get_user_by_username(userName):
+def get_user_by_username(user_name):
     #login a user
-    query = ("""SELECT * from users where userName = '{}'""".format(userName))
+    query = ("""SELECT * from users where username = '{}'""".format(user_name))
     cursor.execute(query)
-    userName = cursor.fetchone()
-    return userName
+    user_name = cursor.fetchone()
+    return user_name
 
-def post_new_question(qstn_tag, question, qstn_owner, date):
+def post_new_question(title, question, qstn_owner, date):
     query = (
-        """INSERT INTO questions (qstn_tag, question, qstn_owner, date) VALUES ('{}', '{}', '{}', '{}')""".
-        format(qstn_tag, question, qstn_owner, date))
+        """INSERT INTO questions (title, question, qstn_owner, date) VALUES ('{}', '{}', '{}', '{}')""".
+        format(title, question, qstn_owner, date))
     cursor.execute(query)
 
 def is_question_exist(question):
@@ -59,7 +59,7 @@ def get_all_questions():
     return all_questions  
 
 def get_single_question(qstn_id):
-        """ function to get details of a question"""
-        cursor.execute("SELECT * FROM questions WHERE qstn_id = '{}'" .format(qstn_id))
-        row = cursor.fetchone()
-        return row
+    """ function to get details of a question"""
+    cursor.execute("SELECT * FROM questions WHERE qstn_id = '{}'" .format(qstn_id))
+    row = cursor.fetchone()
+    return row

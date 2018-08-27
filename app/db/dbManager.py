@@ -9,7 +9,7 @@ class DBConnection:
         self.con = psycopg2.connect(database="stackoverflow", user="postgres", password="araali", host="localhost",port="5432")
         self.con.autocommit = True
         self.cursor = self.con.cursor()
-        self.dict_cursor = self.con.cursor(cursor_factory=extra.DictCursor)
+        self.dict_cursor = self.con.cursor(cursor_factory=extra.RealDictCursor)
 
     def create_tables(self):
 		
@@ -26,7 +26,7 @@ class DBConnection:
 			"""
 			CREATE TABLE IF NOT EXISTS questions (
 				qstn_id SERIAL PRIMARY KEY,
-					qstn_tag VARCHAR(20) NOT NULL,
+					title VARCHAR(20) NOT NULL,
 					question VARCHAR(250) NOT NULL,
 					qstn_owner VARCHAR(20) NOT NULL,
                     date timestamp NOT NULL
@@ -55,8 +55,3 @@ class DBConnection:
         )
         for query in queries:
             self.cursor.execute(query)
-
-
-# if __name__ == "__main__":
-#  	db = DBConnection()
-#  	db.create_tables()
