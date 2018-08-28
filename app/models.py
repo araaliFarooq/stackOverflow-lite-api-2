@@ -28,10 +28,11 @@ class Question:
         return repr(self.__dict__)
 
 class Answer:
-    def __init__(self, answer, ans_owner, qstn_id, date):
+    def __init__(self, answer, ans_owner, qstn_id, status, date):
         self.answer = answer
         self.ans_owner = ans_owner
         self.qstn_id = qstn_id
+        self.status = status
         self.date = date
 
 class Comment:

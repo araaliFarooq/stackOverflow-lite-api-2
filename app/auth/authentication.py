@@ -66,7 +66,7 @@ class Login(MethodView):
         user = get_user_by_username(user_name)
 
         if user:
-            access_token = create_access_token(identity= user_name)
+            access_token = create_access_token(identity= user["username"])
             user_token["token"] = access_token
             return jsonify(user_token), 200
 
