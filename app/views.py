@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.validation import FieldValidation
 from app.models import Question, Answer, Comment
-from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username, get_all_questions, get_single_question,get_all_answers_to_question
+from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username, get_all_questions, get_single_question,get_all_answers_to_question, delete_question
 
 validate = FieldValidation()
 question_blueprint = Blueprint("question_blueprint", __name__)
@@ -79,7 +79,31 @@ class FetchSingleQuestion(MethodView):
                 }), 200
             return jsonify({"message": "Question does not exit"}), 404
         except:
-            return jsonify({"message":"Check your url and try again"})
+            return jsonify({"message":"Check your url and try again"}), 400
+
+class DeleteQuestion(MethodView):
+    """Delete a specific question"""
+    @jwt_required
+    def delete(self, qstn_id):
+        try:
+            id_validation = validate.validate_entered_id(qstn_id)
+            if id_validation:
+                return id_validation
+
+            loggedin_user = get_jwt_identity()
+            user = get_user_by_username(user_name=loggedin_user)
+            qstn_owner = user["username"]
+            delete = delete_question(qstn_id=qstn_id, qstn_owner=qstn_owner)
+            if delete:
+                return jsonify({"message":"Question successfully deleted"}),200
+                
+            return jsonify({"message":"Check your url and try again"}),400
+    
+
+
+        except:
+            return jsonify({"message":"Check your url and try again"}),400
+
 
 
 

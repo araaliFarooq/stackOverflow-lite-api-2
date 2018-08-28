@@ -69,4 +69,10 @@ def get_all_answers_to_question(qstn_id):
     query = ("""SELECT * from answers where qstn_id = '{}'""".format(qstn_id))
     cursor.execute(query)
     answers = cursor.fetchall()
-    return answers   
+    return answers
+
+def delete_question(qstn_id, user_name):
+    """function to delete a specific question"""
+    query = ("""DELETE FROM questions WHERE qstn_id = '{}' and qstn_owner = '{}'""" .format(qstn_id, user_name))
+    delete = cursor.execute(query)
+    return delete
