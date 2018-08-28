@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.validation import FieldValidation
 from app.models import Question, Answer, Comment
-from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username, get_all_questions, get_single_question
+from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username, get_all_questions, get_single_question,get_all_answers_to_question
 
 validate = FieldValidation()
 question_blueprint = Blueprint("question_blueprint", __name__)
@@ -22,7 +22,7 @@ class PostQuestion(MethodView):
             loggedin_user = get_jwt_identity()
             user = get_user_by_username(user_name=loggedin_user)
 
-            qstn_owner = user[1]
+            qstn_owner = user["username"]
             title = data.get("title").strip()
             question = data.get("question").strip()
 
@@ -49,7 +49,7 @@ class PostQuestion(MethodView):
                 date=date)
             return jsonify({'New Question Posted': new_question.__dict__}), 201
         except:
-            return jsonify({"message":"All fields should be required"})
+            return jsonify({"message":"All fields are required"}),400
 
 
 class FetchAllQuestions(MethodView):
@@ -66,15 +66,22 @@ class FetchSingleQuestion(MethodView):
     """class to get single question"""
     @jwt_required
     def get(self, qstn_id):
+        try:
+            id_validation = validate.validate_entered_id(qstn_id)
+            if id_validation:
+                return id_validation
 
-        id_validation = validate.validate_entered_id(qstn_id)
-        if id_validation:
-            return id_validation
+            question_details = get_single_question(qstn_id=qstn_id)
+            all_answers = get_all_answers_to_question(qstn_id=qstn_id)
+            if question_details:
+                return jsonify({"Question Details": question_details,
+                "Answers":all_answers
+                }), 200
+            return jsonify({"message": "Question does not exit"}), 404
+        except:
+            return jsonify({"message":"Check your url and try again"})
 
-        question_details = get_single_question(qstn_id=qstn_id)
-        if question_details:
-            return jsonify({"Question Details": question_details}), 200
-        return jsonify({"message": "Question does not exit"}), 404
+
 
 post_question_view = PostQuestion.as_view("post_question_view")
 fetch_questions_view = FetchAllQuestions.as_view("fetch_questions_view")
