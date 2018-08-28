@@ -35,6 +35,8 @@ class FieldValidation:
             return jsonify({"message": "No question tag was given"}), 400
         if not question:
             return jsonify({"message": "No question was given"}), 400
+        if len(title) < 4:
+            return jsonify({"message": "Title has to be at least 4 characters long"}), 400
         if len(question) < 10:
             return jsonify({"message": "Question has to be at least 10 characters long"}), 400
 
@@ -55,5 +57,11 @@ class FieldValidation:
         if re.search('[a-zA-Z]', input) != None:
             return True
         return False    
+
+    def validate_answer(self, answer):
+        if not answer:
+            return jsonify({"message": "No answer was given"}), 400
+        if len(answer) < 10:
+            return jsonify({"message": "Answer has to be at least 10 characters long"}), 400
 
     
