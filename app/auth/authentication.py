@@ -15,11 +15,11 @@ class RegisterUser(MethodView):
     def post(self):
         reg_info = request.get_json()
 
-        userName = reg_info.get("username").strip()
+        user_name = reg_info.get("username").strip()
         email    = reg_info.get("email").strip()
         password = reg_info.get("password")
 
-        validation_resp = validate.client_validation(userName, password)
+        validation_resp = validate.register_validation(user_name, email, password)
 
         if validation_resp:
             return validation_resp
@@ -28,7 +28,11 @@ class RegisterUser(MethodView):
         if email_validation == False:
             return jsonify({"message": "wrong email entered, Please try again"}), 400
 
-        does_user_exist = is_user_exist(userName)
+        validate_username = validate.validate_characters(user_name)
+        if not validate_username:
+            return jsonify({"message": "wrong username format entered, Please try again"}), 400
+
+        does_user_exist = is_user_exist(user_name)
         does_email_exist = is_email_exist(email)
 
         if does_user_exist:
@@ -38,28 +42,31 @@ class RegisterUser(MethodView):
             return jsonify({"message": "Email already exists"}), 400
 
         else:
-            add_new_user(userName=userName, email=email, password=password)
-            new_user = User(userName, email, password)
+            add_new_user(user_name=user_name, email=email, password=password)
+            new_user = User(user_name, email, password)
             return jsonify({"New User Created": new_user.__dict__}), 200
-
 
 class Login(MethodView):
     def post(self):
         login_info = request.get_json()
 
-        userName = login_info.get("username").strip()
+        user_name = login_info.get("username").strip()
         password = login_info.get("password").strip()
 
-        login_validation = validate.client_validation(userName, password)
-
+        login_validation = validate.login_validation(user_name, password)
         if login_validation:
             return login_validation
 
+        validate_username = validate.validate_characters(user_name)
+        if not validate_username:
+            return jsonify({"message": "wrong username format entered, Please try again"}), 400
+    
+
         user_token = {}
-        user = get_user_by_username(userName)
+        user = get_user_by_username(user_name)
 
         if user:
-            access_token = create_access_token(identity= userName)
+            access_token = create_access_token(identity= user_name)
             user_token["token"] = access_token
             return jsonify(user_token), 200
 
