@@ -5,7 +5,6 @@ from app.db.dbManager import DBConnection
 
 connect = DBConnection()
 cursor = connect.dict_cursor
-cursor2 = connect.cursor
 
 def add_new_user(user_name, email, password):
     #reegister a user
@@ -87,6 +86,33 @@ def delete_question(qstn_id, user_name):
 
     except Exception as exception:
         return jsonify({"message":str(exception)}),400
+
+def is_answer_exist(qstn_id, answer):
+    # check if answer exists.
+    query = ("""SELECT * FROM answers WHERE qstn_id = '{}' and answer = '{}'""" .format(qstn_id, answer))
+    cursor.execute(query)
+    answer = cursor.fetchone()
+    if answer:
+        return True
+    return False   
+
+def get_question_by_id(qstn_id):
+    # check if question exists.
+    query = ("""SELECT * FROM questions where qstn_id = '{}'""".format(qstn_id))
+    cursor.execute(query)
+    question = cursor.fetchone()
+    if question:
+        return True
+    return False
+
+def post_new_answer(answer, ans_owner, qstn_id, vote, status, date):
+    #post a new answer
+    query = (
+        """INSERT INTO answers (answer, ans_owner, qstn_id, votes, status, date) VALUES ('{}', '{}', '{}','{}', '{}', '{}')""".format(answer, ans_owner, qstn_id, vote, status, date))
+    cursor.execute(query)
+
+
+
         
 
     
