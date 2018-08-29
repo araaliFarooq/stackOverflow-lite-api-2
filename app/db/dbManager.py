@@ -40,6 +40,8 @@ class DBConnection:
                 answer VARCHAR(250) NOT NULL,
                 ans_owner VARCHAR(20) NOT NULL,
                 qstn_id INTEGER NOT NULL,
+                votes INTEGER NOT NULL,
+                status VARCHAR(250) NOT NULL,
                 date timestamp NOT NULL
             )
             """,
