@@ -80,7 +80,7 @@ class Login(MethodView):
                 return jsonify(user_token), 200
 
             return jsonify({"message": "user does not exit, register and login again"}), 404
-        return jsonify({"message": "a 'key' is missing in login body"}), 400   
+        return jsonify({"message": "a 'key(s)' is missing in login body"}), 400   
 
 registration_view = RegisterUser.as_view("registration_view")
 login_view = Login.as_view("login_view")

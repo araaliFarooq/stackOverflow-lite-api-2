@@ -19,7 +19,8 @@ swag = Swagger(app)
 
 @app.route("/")
 def main():
-    return redirect('/home')
+    pass
+    # return redirect('/home')
     
 if __name__ == "__main__":
     dbUtils = dbManager.DBConnection()

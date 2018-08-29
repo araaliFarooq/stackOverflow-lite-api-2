@@ -129,9 +129,9 @@ def update_answer(answer, ans_id, qstn_id):
         cursor.execute(query)
         count = cursor.rowcount
         if int(count) > 0:
-            return jsonify({"message":"Answer successfully updated"}),200
+            return "Answer successfully updated"
         else:
-            return jsonify({"message":"Answer not updated, or doesn't exist"}),400   
+            return "Answer not updated, or doesn't exist"   
 
     except Exception as exception:
         return jsonify({"message":str(exception)}),400   
@@ -144,9 +144,9 @@ def accept_answer(status, qstn_id, ans_id):
         cursor.execute(query)
         count = cursor.rowcount
         if int(count) > 0:
-            return jsonify({"message":"Answer successfully accepted"}),200
+            return "Answer successfully accepted"
         else:
-            return jsonify({"message":"Failed to accept answer, or it doesn't exist"}),400   
+            return "Failed to accept answer, or it doesn't exist"
 
     except Exception as exception:
         return jsonify({"message":str(exception)}),400   
