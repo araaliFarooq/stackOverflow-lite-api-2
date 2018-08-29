@@ -1,6 +1,7 @@
 from app import app
 from app.db import dbManager
 from flask import jsonify
+from flasgger import Swagger
 
 @app.errorhandler(405)
 def url_not_found(error):
@@ -14,6 +15,12 @@ def content_not_found(error):
 def internal_server_error(error):
     return jsonify({'message': "Internal server error"}),500
 
+swag = Swagger(app)
+
+@app.route("/")
+def main():
+    return redirect('/home')
+    
 if __name__ == "__main__":
     dbUtils = dbManager.DBConnection()
     dbUtils.create_tables()
