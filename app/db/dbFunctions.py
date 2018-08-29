@@ -1,9 +1,11 @@
 # Functions to interact with the db
 
+from flask import jsonify
 from app.db.dbManager import DBConnection
 
 connect = DBConnection()
 cursor = connect.dict_cursor
+cursor2 = connect.cursor
 
 def add_new_user(user_name, email, password):
     #reegister a user
@@ -73,6 +75,18 @@ def get_all_answers_to_question(qstn_id):
 
 def delete_question(qstn_id, user_name):
     """function to delete a specific question"""
-    query = ("""DELETE FROM questions WHERE qstn_id = '{}' and qstn_owner = '{}'""" .format(qstn_id, user_name))
-    delete = cursor.execute(query)
-    return delete
+    try:
+        query = ("""DELETE FROM questions WHERE qstn_id = '{}' and qstn_owner = '{}'""" .format(qstn_id, user_name))
+        cursor.execute(query)
+        delete = cursor.rowcount
+
+        if int(delete) > 0:
+            return jsonify({"message":"Question successfully deleted"}),200
+        else:
+            return jsonify({"message":"Question not deleted, or doesn't exist"}),400   
+
+    except Exception as exception:
+        return jsonify({"message":str(exception)}),400
+        
+
+    

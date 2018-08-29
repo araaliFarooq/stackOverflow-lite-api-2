@@ -93,13 +93,8 @@ class DeleteQuestion(MethodView):
             loggedin_user = get_jwt_identity()
             user = get_user_by_username(user_name=loggedin_user)
             qstn_owner = user["username"]
-            delete = delete_question(qstn_id=qstn_id, qstn_owner=qstn_owner)
-            if delete:
-                return jsonify({"message":"Question successfully deleted"}),200
-                
-            return jsonify({"message":"Check your url and try again"}),400
-    
-
+            delete = delete_question(qstn_id=qstn_id, user_name=qstn_owner)
+            return delete
 
         except:
             return jsonify({"message":"Check your url and try again"}),400
@@ -111,6 +106,7 @@ post_question_view = PostQuestion.as_view("post_question_view")
 fetch_questions_view = FetchAllQuestions.as_view("fetch_questions_view")
 fetch_one_question_view = FetchSingleQuestion.as_view(
     "fetch_one_question_view")
+delete_question_view = DeleteQuestion.as_view("delete_question_view")    
 
 question_blueprint.add_url_rule(
     "/api/questions", view_func=post_question_view, methods=["POST"])
@@ -120,3 +116,4 @@ question_blueprint.add_url_rule(
     "/api/questions/<qstn_id>",
     view_func=fetch_one_question_view,
     methods=["GET"])
+question_blueprint.add_url_rule("/api/questions/<qstn_id>", view_func=delete_question_view, methods=["DELETE"])
