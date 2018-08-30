@@ -221,15 +221,16 @@ class UpDateAnswer(MethodView):
                                 }), 400
 
                             update = update_answer(answer=answer,  ans_id=ans_id, qstn_id=qstn_id)
-                            return update
+                            updated_answer = get_answer_details(qstn_id=qstn_id, ans_id=ans_id)
+                            return jsonify({"message":update, "Updated answer":updated_answer})
                         return jsonify({"message": "Answer 'key' is missing"}), 400  
 
                     if current_user == question_details["qstn_owner"]:
                         status = "Accepted"
 
                         accept = accept_answer(status=status, qstn_id=qstn_id, ans_id=ans_id)
-                        return accept
-
+                        updated_answer = get_answer_details(qstn_id=qstn_id, ans_id=ans_id)
+                        return jsonify({"message":accept, "Updated answer":updated_answer})
                 return jsonify({"message": " No such answer exists"}), 404
             return jsonify({"message": " No such question exists any more"}), 404          
 
