@@ -1,8 +1,8 @@
 # stackOverflow-lite-api-2
 
-[![Build Status](https://travis-ci.org/araaliFarooq/stackOverflow-lite-api-2.svg?branch=master)](https://travis-ci.org/araaliFarooq/stackOverflow-lite-api-2)
+[![Build Status](https://travis-ci.org/araaliFarooq/stackOverflow-lite-api-2.svg?branch=challenge_3)](https://travis-ci.org/araaliFarooq/stackOverflow-lite-api-2)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/8be53303a1be4577a6f1a2ea1aa62f6b)](https://www.codacy.com/app/araaliFarooq/stackOverflow-lite-api-2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=araaliFarooq/stackOverflow-lite-api-2&amp;utm_campaign=Badge_Grade)
-[![Coverage Status](https://coveralls.io/repos/github/araaliFarooq/stackOverflow-lite-api-2/badge.svg?branch=master)](https://coveralls.io/github/araaliFarooq/stackOverflow-lite-api-2?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/araaliFarooq/stackOverflow-lite-api-2/badge.svg?branch=challenge_3)](https://coveralls.io/github/araaliFarooq/stackOverflow-lite-api-2?branch=challenge_3)
 
 
 ## About
