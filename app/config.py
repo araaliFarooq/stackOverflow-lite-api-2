@@ -8,7 +8,7 @@ class BaseConfig(object):
     """
     TESTING = False
     DEBUG = False
-    SECRET_KEY = "awesome nakatudde"
+    SECRET_KEY = "sec-def-oscar-zulu-3-zero-niner"
 
 
 class TestingConfig(BaseConfig):
