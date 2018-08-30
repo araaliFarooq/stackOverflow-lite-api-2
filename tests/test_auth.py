@@ -1,11 +1,6 @@
 from tests.base_test import BaseTestCase
 from run import app
 from flask import jsonify, json
-from app.models import User
-from app.db.dbManager import DBConnection
-
-my_connection = DBConnection()
-
 
 class Test_auth(BaseTestCase):
 
