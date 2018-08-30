@@ -119,7 +119,7 @@ class PostAnswerToQuestion(MethodView):
         try:
             data = request.get_json()
 
-            if "answer" in data.keys():
+            if "answer" in data.keys(): 
                 answer = data.get("answer").strip()
 
                 now = datetime.datetime.now()
