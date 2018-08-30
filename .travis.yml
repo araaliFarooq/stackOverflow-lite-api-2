@@ -19,23 +19,4 @@ script:
   - python3 -m pytest --cov=app tests/
 
 after_success:
-- coverallslanguage: python
-python:
-  - "3.6"
-# command to install dependencies
-install:
-  - pip install -r requirements.txt
-  - pip install coveralls
-
-services:
-  - postgresql
-
-before_script:
-  - psql -c 'create database stackoverflow;' -U postgres
-  - psql -c 'create database stackoverflow_tests;' -U postgres
-  
-# command to run tests
-script:
-  - python3 -m pytest --cov=app tests/
-after_success:
 - coveralls
