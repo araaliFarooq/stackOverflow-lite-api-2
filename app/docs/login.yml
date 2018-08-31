@@ -1,0 +1,42 @@
+Login user
+---
+tags:
+  - User Authentication
+parameters:
+  - in: body
+    type: string
+    name: body
+    required: true
+    description: Logging in user
+responses:
+  200:
+    description: User logged in successfully
+  201:
+    description: You logged in successfully
+  schema:
+      id: successful login
+      properties:
+        username:
+          type: string
+          default: araali
+        password:
+          type: string
+          default: abcd1234
+        response:
+          type: string
+          default: {'access_token': "eyJ0eXAiOiJKV1QiLCJhbGci", 'message': You logged in successfully}
+  404:
+    description: User does not exist.
+    schema:
+      id: user does not exist, register and login again
+      properties:
+        username:
+          type: string
+          default: araali
+        password:
+          type: string
+          default: dcgh5678
+        response:
+          type: string
+          default: user does not exist, register and login again
+  

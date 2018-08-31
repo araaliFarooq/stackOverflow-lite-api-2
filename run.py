@@ -1,6 +1,6 @@
 from app import app
 from app.db import dbManager
-from flask import jsonify
+from flask import jsonify, redirect
 from flasgger import Swagger
 
 @app.errorhandler(405)
@@ -15,12 +15,21 @@ def content_not_found(error):
 def internal_server_error(error):
     return jsonify({'message': "Internal server error"}),500
 
-swag = Swagger(app)
-
+swagger = Swagger(app, 
+template= {
+    "info":{
+    "title":"StackOverflow"},
+    "securityDefinitions":{
+    "TokenHeader": {
+        "type": "apiKey",
+        "name":"Authorization",
+        "in": "header"   
+    }
+    }
+})
 @app.route("/")
 def main():
-    pass
-    # return redirect('/')
+    return redirect('/home')
     
 if __name__ == "__main__":
     dbUtils = dbManager.DBConnection()

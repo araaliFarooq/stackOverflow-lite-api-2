@@ -4,7 +4,7 @@ from flask.views import MethodView
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from app.validation import FieldValidation
 from app.models import Question, Answer, Comment
-from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username, get_all_questions, get_single_question, get_all_answers_to_question, delete_question, get_question_by_id, is_answer_exist, post_new_answer, update_answer, get_answer_details, accept_answer, get_answer_by_id
+from app.db.dbFunctions import post_new_question, is_question_exist, get_user_by_username, get_all_questions, get_single_question, get_all_answers_to_question, delete_question, get_question_by_id, is_answer_exist, post_new_answer, update_answer, get_answer_details, accept_answer, get_answer_by_id, get_all_user_questions, truncant_answers
 
 validate = FieldValidation()
 question_blueprint = Blueprint("question_blueprint", __name__)
@@ -106,6 +106,7 @@ class DeleteQuestion(MethodView):
             user = get_user_by_username(user_name=loggedin_user)
             qstn_owner = user["username"]
             delete = delete_question(qstn_id=qstn_id, user_name=qstn_owner)
+            truncant_answers(qstn_id=qstn_id)
             return delete
 
         except Exception as exception:
@@ -194,7 +195,7 @@ class UpDateAnswer(MethodView):
             user = get_user_by_username(user_name=loggedin_user)
             current_user = user["username"]
 
-            does_answer_exist = get_answer_by_id(ans_id=ans_id)
+            does_answer_exist = get_answer_by_id(ans_id=ans_id, qstn_id=qstn_id)
             does_qstn_exist = get_question_by_id(qstn_id=qstn_id)
             ans_owner = get_answer_details(qstn_id, ans_id)
             question_details = get_single_question(qstn_id=qstn_id)
@@ -234,7 +235,27 @@ class UpDateAnswer(MethodView):
             return jsonify({"message": "No such question exists any more"}), 404          
 
         except Exception as exception:
+            print(exception)
             return jsonify({"message": exception}), 400   
+
+
+class FetchAllUserQuestions(MethodView):
+    """class to fetch all the questions a user ever asked"""
+    @jwt_required
+    def get(self):
+
+        loggedin_user = get_jwt_identity()
+        user = get_user_by_username(user_name=loggedin_user)
+        qstn_owner = user["username"]
+
+        user_questions = get_all_user_questions(user_name=qstn_owner)
+
+        if user_questions:
+            return jsonify({"All Questions":user_questions}), 200
+        return jsonify({"message":"user has no questions"}), 404    
+
+
+
 
 
 post_question_view = PostQuestion.as_view("post_question_view")
@@ -244,6 +265,7 @@ fetch_one_question_view = FetchSingleQuestion.as_view(
 delete_question_view = DeleteQuestion.as_view("delete_question_view")
 post_answer_view = PostAnswerToQuestion.as_view("post_answer_view")
 update_answer_view = UpDateAnswer.as_view("update_answer_view")
+get_user_questions_view = FetchAllUserQuestions.as_view("get_user_questions_view")
 
 question_blueprint.add_url_rule(
     "/api/questions", view_func=post_question_view, methods=["POST"])
@@ -263,4 +285,5 @@ question_blueprint.add_url_rule(
     methods=["POST"])
 
 question_blueprint.add_url_rule("/api/questions/<qstn_id>/answers/<ans_id>", view_func=update_answer_view, methods=["PUT"])
+question_blueprint.add_url_rule("/api/questions/user_questions", view_func=get_user_questions_view, methods=["GET"])
 

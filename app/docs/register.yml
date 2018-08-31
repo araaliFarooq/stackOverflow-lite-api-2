@@ -1,0 +1,32 @@
+Register new user
+---
+tags:
+  - User Authentication
+parameters:
+  - in: body
+    type: string
+    name: body
+    required: true
+    description: Register users
+responses:
+  201:
+    description: User registered successfully
+    schema:
+      id: Register user
+      properties:
+        username:
+          type: string
+          default: araali
+        email:
+          type: string
+          default: farooq@gmail.com
+        password:
+          type: string
+          default: abcd1234
+        response:
+          type: string
+          default: You registered successfully. Please log in.
+  500:
+    description: An error has occured
+  409:
+    description: User already exists. Please login.

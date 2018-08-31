@@ -10,7 +10,7 @@ class Test_auth(BaseTestCase):
                                  content_type='application/json',
                                  data=json.dumps(dict(username="araali2", email="22araali@email.com", password="araali"),)
                                  )
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(response.status_code, 201)
 
     def test_registration_with_empty_user_name(self):
         """ Test for empty username validation """

@@ -13,7 +13,7 @@ auth_blueprint = Blueprint("auth_blueprint", __name__)
 
 class RegisterUser(MethodView):
     # register new user
-    @swag_from("/.app/docs/register.yml")
+    @swag_from("/app/docs/register.yml")
     def post(self):
         reg_info = request.get_json()
 
@@ -49,7 +49,7 @@ class RegisterUser(MethodView):
             else:
                 add_new_user(user_name=user_name, email=email, password=password)
                 new_user = User(user_name, email, password)
-                return jsonify({"New User Created": new_user.__dict__}), 200
+                return jsonify({"New User Created": new_user.__dict__}), 201
         return jsonify({"message": "a 'key(s)' is missing in your registration body"}), 400   
         
 
@@ -79,7 +79,7 @@ class Login(MethodView):
                 user_token["token"] = access_token
                 return jsonify(user_token), 200
 
-            return jsonify({"message": "user does not exit, register and login again"}), 404
+            return jsonify({"message": "user does not exist, register and login again"}), 404
         return jsonify({"message": "a 'key(s)' is missing in login body"}), 400   
 
 registration_view = RegisterUser.as_view("registration_view")
