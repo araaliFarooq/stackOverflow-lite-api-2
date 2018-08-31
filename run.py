@@ -15,22 +15,6 @@ def content_not_found(error):
 def internal_server_error(error):
     return jsonify({'message': "Internal server error"}),500
 
-swagger = Swagger(app, 
-template= {
-    "info":{
-    "title":"StackOverflow"},
-    "securityDefinitions":{
-    "TokenHeader": {
-        "type": "apiKey",
-        "name":"Authorization",
-        "in": "header"   
-    }
-    }
-})
-@app.route("/")
-def main():
-    return redirect('/home')
-    
 if __name__ == "__main__":
     dbUtils = dbManager.DBConnection()
     dbUtils.create_tables()
