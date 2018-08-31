@@ -32,7 +32,7 @@ class FieldValidation:
     
     def validate_question(self, title, question):
         if not title:
-            return jsonify({"message": "No question tag was given"}), 400
+            return jsonify({"message": "No question title was given"}), 400
         if not question:
             return jsonify({"message": "No question was given"}), 400
         if len(title) < 4:

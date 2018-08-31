@@ -7,157 +7,103 @@ from app.models import User
 class Test_Posting_Question(BaseTestCase):
 
     
-    def test_adding_offer_with_empty_location(self):
-        """ Test for empty location validation """
+    def test_posting_new_question(self):
+        """ Test posting question """
         
         response1 = self.app.post("/api/auth/register",
                                  content_type='application/json',
-                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
-                                                      contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
+                                 data=json.dumps(dict(username="araali2", email="22araali@email.com", password="araali"),)
                                  )
         response = self.app.post(
             "/api/auth/login",
             content_type='application/json',
-            data=json.dumps(dict(userName="araali", password="farooq"))
+            data=json.dumps(dict(username="araali2", password="araali"))
         )
         reply2 = json.loads(response.data.decode())
 
-        response2 = self.app.post("/api/v1/rides/create_offer",
+        response2 = self.app.post("/api/questions",
                                  content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
-                                 data=json.dumps(dict(location="",
-                                                      car_type="Benz", plate_number="uab 123x", contact="08887676", availability="10am - 10pm", cost_per_km="200"),)   
+                                 data=json.dumps(dict(title="Life", question="Are there so many questions about life?"),)   
                              ) 
+        self.assertEquals(response2.status_code, 201)
 
-        reply = json.loads(response2.data)
-        self.assertEquals(reply.get("message"), "location is missing")
-        self.assertEquals(response2.status_code, 400)  
 
-    def test_adding_offer_with_empty_car_type(self):
-        """ Test for empty empty car type validation """
+    def test_posting_existing_question(self):
+        """ Test posting a question """
         
-        response1 = self.app.post("/api/v1/user/register",
+        response1 = self.app.post("/api/auth/register",
                                  content_type='application/json',
-                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
-                                                      contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
+                                 data=json.dumps(dict(username="araali2", email="22araali@email.com", password="araali"),)
                                  )
         response = self.app.post(
-            "/api/v1/user/login",
+            "/api/auth/login",
             content_type='application/json',
-            data=json.dumps(dict(userName="araali", password="farooq"))
+            data=json.dumps(dict(username="araali2", password="araali"))
         )
         reply2 = json.loads(response.data.decode())
 
-        response2 = self.app.post("/api/v1/rides/create_offer",
+        response2 = self.app.post("/api/questions",
                                  content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
-                                 data=json.dumps(dict(location="kawempe",
-                                                      car_type="", plate_number="uab 123x", contact="08887676", availability="10am - 10pm", cost_per_km="200"),)   
-                             ) 
+                                 data=json.dumps(dict(title="Life", question="Are there so many questions about life?"),)   
+                             )
+        response2 = self.app.post("/api/questions",
+                                 content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
+                                 data=json.dumps(dict(title="Life style", question="Are there so many questions about life?"),)   
+                             )                       
 
         reply = json.loads(response2.data)
-        self.assertEquals(reply.get("message"), "car type is missing")
-        self.assertEquals(response2.status_code, 400)  
+        self.assertEquals(reply.get("message"), "Question already exists, check it out for an answer")
+        self.assertEquals(response2.status_code, 409)
 
-    def test_adding_offer_with_empty_plate_number(self):
-        """ Test for empty number plate validation """
+
+    def test_posting_with_empty_question(self):
+        """ Test posting a question """
         
-        response1 = self.app.post("/api/v1/user/register",
+        response1 = self.app.post("/api/auth/register",
                                  content_type='application/json',
-                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
-                                                      contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
+                                 data=json.dumps(dict(username="araali2", email="22araali@email.com", password="araali"),)
                                  )
         response = self.app.post(
-            "/api/v1/user/login",
+            "/api/auth/login",
             content_type='application/json',
-            data=json.dumps(dict(userName="araali", password="farooq"))
+            data=json.dumps(dict(username="araali2", password="araali"))
         )
         reply2 = json.loads(response.data.decode())
 
-        response2 = self.app.post("/api/v1/rides/create_offer",
+        response2 = self.app.post("/api/questions",
                                  content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
-                                 data=json.dumps(dict(location="kawempe",
-                                                      car_type="Benz", plate_number="", contact="08887676", availability="10am - 10pm", cost_per_km="200"),)   
-                             ) 
-
+                                 data=json.dumps(dict(title="Life", question=" "),)   
+                             )
+       
         reply = json.loads(response2.data)
-        self.assertEquals(reply.get("message"), "plate number is missing")
-        self.assertEquals(response2.status_code, 400)  
-
-
-    def test_adding_offer_with_empty_contact(self):
-        """ Test for empty contact validation """
-        
-        response1 = self.app.post("/api/v1/user/register",
-                                 content_type='application/json',
-                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
-                                                      contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
-                                 )
-        response = self.app.post(
-            "/api/v1/user/login",
-            content_type='application/json',
-            data=json.dumps(dict(userName="araali", password="farooq"))
-        )
-        reply2 = json.loads(response.data.decode())
-
-        response2 = self.app.post("/api/v1/rides/create_offer",
-                                 content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
-                                 data=json.dumps(dict(location="kawempe",
-                                                      car_type="Benz", plate_number="uab 123x", contact="", availability="10am - 10pm", cost_per_km="200"),)   
-                             ) 
-
-        reply = json.loads(response2.data)
-        self.assertEquals(reply.get("message"), "contact is missing")
+        self.assertEquals(reply.get("message"), "No question was given")
         self.assertEquals(response2.status_code, 400)  
 
 
-    def test_adding_offer_with_empty_availability(self):
-        """ Test for empty availability validation """
+    def test_posting_with_empty_title(self):
+        """ Test posting a question """
         
-        response1 = self.app.post("/api/v1/user/register",
+        response1 = self.app.post("/api/auth/register",
                                  content_type='application/json',
-                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
-                                                      contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
+                                 data=json.dumps(dict(username="araali2", email="22araali@email.com", password="araali"),)
                                  )
         response = self.app.post(
-            "/api/v1/user/login",
+            "/api/auth/login",
             content_type='application/json',
-            data=json.dumps(dict(userName="araali", password="farooq"))
+            data=json.dumps(dict(username="araali2", password="araali"))
         )
         reply2 = json.loads(response.data.decode())
 
-        response2 = self.app.post("/api/v1/rides/create_offer",
+        response2 = self.app.post("/api/questions",
                                  content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
-                                 data=json.dumps(dict(location="kawempe",
-                                                      car_type="Benz", plate_number="uab 123x", contact="08887676", availability="", cost_per_km="200"),)   
-                             ) 
-
+                                 data=json.dumps(dict(title="", question=" Are there so many questions about life"),)   
+                             )
+       
         reply = json.loads(response2.data)
-        self.assertEquals(reply.get("message"), "working hours not stated")
-        self.assertEquals(response2.status_code, 400)  
+        self.assertEquals(reply.get("message"), "No question title was given")
+        self.assertEquals(response2.status_code, 400)                   
+          
 
-
-    def test_adding_offer_with_empty_cost_per_km(self):
-        """ Test for empty cost per km validation """
-        
-        response1 = self.app.post("/api/v1/user/register",
-                                 content_type='application/json',
-                                 data=json.dumps(dict(firstName="Natie", secondName="kyra", userName="araali",
-                                                      contact="0888887676", user_category="driver", password="farooq", car_type="rover", reg_num="uab1234", lic_num="4567789999"),)
-                                 )
-        response = self.app.post(
-            "/api/v1/user/login",
-            content_type='application/json',
-            data=json.dumps(dict(userName="araali", password="farooq"))
-        )
-        reply2 = json.loads(response.data.decode())
-
-        response2 = self.app.post("/api/v1/rides/create_offer",
-                                 content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
-                                 data=json.dumps(dict(location="kawempe",
-                                                      car_type="Benz", plate_number="uab 123x", contact="08887676", availability="10am - 10pm", cost_per_km=""),)   
-                             ) 
-
-        reply = json.loads(response2.data)
-        self.assertEquals(reply.get("message"), "charge per Km not stated")
-        self.assertEquals(response2.status_code, 400)
+BaseTestCase.tearDown
     
     
