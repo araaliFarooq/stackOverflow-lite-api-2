@@ -25,6 +25,8 @@ class Test_Posting_Question(BaseTestCase):
                                  content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
                                  data=json.dumps(dict(title="Life", question="Are there so many questions about life?"),)   
                              ) 
+        reply3 = json.loads(response2.data.decode())
+        self.assertIn(("Are there so many questions about life?"), reply3.get("New Question Posted").values())
         self.assertEquals(response2.status_code, 201)
 
 
