@@ -8,7 +8,7 @@ from app.config import app_config
 class DBConnection:
     def __init__(self):
         if app_config["testing"]:
-            self.con = psycopg2.connect(database="stackoverflow_tests", user="postgres", password="araali", host="localhost",port="5432")
+            self.con = psycopg2.connect(database="d6g8i1ipjgg2po", user="gsbbhuzjuktutl", password="39cace0ce7bed1f58c1553115085c421e9acc27e4cae7710d6d1ade67c3e8923", host="ec2-54-83-3-101.compute-1.amazonaws.com",port="5432")
             self.con.autocommit = True
             self.cursor = self.con.cursor()
             self.dict_cursor = self.con.cursor(cursor_factory=extra.RealDictCursor)
