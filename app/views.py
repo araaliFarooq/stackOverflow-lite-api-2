@@ -118,9 +118,10 @@ class PostAnswerToQuestion(MethodView):
     def post(self, qstn_id):
         try:
             data = request.get_json()
-            search_keys = ("answer")
+            # search_keys = ("answer")
 
-            if all(key in data.keys() for key in search_keys):
+            if "answer" in data.keys(): 
+            # all(key in data.keys() for key in search_keys):
                 answer = data.get("answer").strip()
 
                 now = datetime.datetime.now()
