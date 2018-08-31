@@ -12,7 +12,6 @@ This is an API for a Question and Answer (Q&A) application that allows users to 
 - Register a user
 - Login a user
 - Get all the questions posted on the app
-- Search and get a specific question
 - Post any question on the app.
 - Post an answer to a given question.
 - Accept or reject an answer given to your question.
@@ -20,14 +19,14 @@ This is an API for a Question and Answer (Q&A) application that allows users to 
 - Update your answer to a given question
 
 ## Other features
-- Comment on an answer
+- View all questions you have ever posted
 
 ## Tools Used
 - [Flask](http://flask.pocoo.org/) - web microframework for Python
 - [PostgreSQL](https://www.postgresql.org/)- Open source relational database
 
 ## Requirements
-Python 3.x.x+
+Python 3.6
  
 ## Run (Use) on your local machine
 First clone the repository
@@ -48,7 +47,7 @@ HTTP Method|End point | Public Access|Action
 POST | /api/auth/register | True | Create a user account
 POST | /api/auth/login | True | Login a user
 
-#### Endpoints to create, read user ride offers and requests
+#### Endpoints to create, read, update, and delete questions and answers
 HTTP Method|End point | Public Access|Action
 -----------|----------|--------------|------
 POST | /api/questions | False | Post a Question
@@ -57,6 +56,7 @@ GET | /api/questions/<qstn_id> | False | Fetch a single question
 POST | /api/questions/<qstn_id>/answers | False | Post an answer to a question
 DELETE | /api/questions/<qstn_id> | False | Delete a question
 PUT | /api/questions/<qstn_id>/answers/<ans_id>| False | Accept an answer or Update an answer
+GET | /api/questions/all_questions | False | Fetch all Questions you have ever posted
 
-## Author
-[Araali Sseruwu Farooq](https://github.com/araalifarooq)
+
+
