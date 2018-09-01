@@ -6,14 +6,12 @@ from flask_jwt_extended import create_access_token
 from app.validation import FieldValidation
 from app.models import User
 from app.db.dbFunctions import is_user_exist, add_new_user, get_user_by_username, is_email_exist
-from flasgger import swag_from
 
 validate = FieldValidation()
 auth_blueprint = Blueprint("auth_blueprint", __name__)
 
 class RegisterUser(MethodView):
     # register new user
-    @swag_from("/app/docs/register.yml")
     def post(self):
         reg_info = request.get_json()
 
