@@ -87,6 +87,22 @@ def delete_question(qstn_id, user_name):
     except Exception as exception:
         return jsonify({"message":str(exception)}),400
 
+def truncant_answers(qstn_id):
+    """function to delete a specific question"""
+    try:
+        query = ("""DELETE FROM answers WHERE qstn_id = '{}'""" .format(qstn_id))
+        cursor.execute(query)
+        delete = cursor.rowcount
+
+        if int(delete) > 0:
+            return True
+        else:
+            return False
+
+    except Exception as exception:
+        return jsonify({"message":str(exception)}),400
+
+
 def is_answer_exist(qstn_id, answer):
     # check if answer exists.
     query = ("""SELECT * FROM answers WHERE qstn_id = '{}' and answer = '{}'""" .format(qstn_id, answer))
@@ -105,9 +121,9 @@ def get_question_by_id(qstn_id):
         return True
     return False
 
-def get_answer_by_id(ans_id):
+def get_answer_by_id(ans_id, qstn_id):
     # check if answer exists.
-    query = ("""SELECT * FROM answers where ans_id = '{}'""".format(ans_id))
+    query = ("""SELECT * FROM answers where ans_id = '{}' and qstn_id = '{}'""" .format(ans_id, qstn_id))
     cursor.execute(query)
     answer = cursor.fetchone()
     if answer:
@@ -157,6 +173,13 @@ def get_answer_details(qstn_id, ans_id):
     cursor.execute("""SELECT * FROM answers WHERE qstn_id = '{}' and ans_id = '{}'""".format(qstn_id, ans_id))
     row = cursor.fetchone()
     return row
+
+
+def get_all_user_questions(user_name):
+    """ function to get a users questions"""
+    cursor.execute("SELECT * FROM questions WHERE qstn_owner = '{}'" .format(user_name))
+    questions = cursor.fetchall()
+    return questions   
 
 
 

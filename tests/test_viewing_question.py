@@ -138,6 +138,45 @@ class Test_Viewing_Question(BaseTestCase):
         self.assertEquals(response3.status_code, 400)
 
 
+    def test_viewing_all_user_questions(self):
+        """ Test viewing questions """       
+        response1 = self.app.post("/api/auth/register",
+                                    content_type='application/json',
+                                    data=json.dumps(dict(username="araali2", email="22araali@email.com", password="araali"),)
+                                    )
+        response = self.app.post(
+            "/api/auth/login",
+            content_type='application/json',
+            data=json.dumps(dict(username="araali2", password="araali"))
+        )
+        reply2 = json.loads(response.data.decode())
+
+        response2 = self.app.post("/api/questions",
+                                content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),
+                                data=json.dumps(dict(title="Life", question="Are there so many questions about life?"),)   
+                            )
+        response3 = self.app.get("/api/questions/user_questions",content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),data={"qstn_id":"1"})
+        self.assertEquals(response3.status_code, 200)
+
+    def test_viewing_all_user_questions_(self):
+        """ Test viewing questions """       
+        response1 = self.app.post("/api/auth/register",
+                                    content_type='application/json',
+                                    data=json.dumps(dict(username="araali2", email="22araali@email.com", password="araali"),)
+                                    )
+        response = self.app.post(
+            "/api/auth/login",
+            content_type='application/json',
+            data=json.dumps(dict(username="araali2", password="araali"))
+        )
+        reply2 = json.loads(response.data.decode())
+
+        
+        response3 = self.app.get("/api/questions/user_questions",content_type='application/json', headers=dict(Authorization='Bearer '+reply2['token']),data={"qstn_id":"1"})
+        reply = json.loads(response3.data.decode())
+        self.assertEquals(reply.get("message"), "user has no questions")
+        self.assertEquals(response3.status_code, 404)    
+
 
 
 

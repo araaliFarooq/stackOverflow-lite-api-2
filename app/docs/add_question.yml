@@ -1,0 +1,38 @@
+Post new question
+---
+tags:
+  - Questions
+parameters:
+  - in: body
+    type: string
+    name: body
+    required: true
+    description: Post a new question
+security:
+  - TokenHeader: []
+responses:
+  201:
+    description: Question successfully posted
+    schema:
+      id: Post new question
+      properties:
+        title:
+          type: string
+          default: Conference
+        question:
+          type: string
+          default: {"date": "2018-09-01 01:12", "qstn_id": 1, "qstn_owner": "natie","question": "How do I apply for the conference","title": "Conference"}
+        response:
+          type: string
+          default: Question successfully posted
+  409:
+    description: Question already exists
+    schema:
+      id: Question already exists
+      properties:
+        category_name:
+          type: string
+          default: {"date": "2018-09-01 01:12", "qstn_id": 1, "qstn_owner": "natie","question": "How do I apply for the conference","title": "Conference"}
+        response:
+          type: string
+          default: Question already exists, check it out for an answer
