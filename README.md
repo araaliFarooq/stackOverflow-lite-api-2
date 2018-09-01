@@ -8,6 +8,9 @@
 ## About
 This is an API for a Question and Answer (Q&A) application that allows users to ask questions to which other users can give answers.
 
+##Demo Link:
+- https://araalifarooq.docs.apiary.io/#
+
 ## Features
 - Register a user
 - Login a user
